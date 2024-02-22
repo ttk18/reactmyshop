@@ -36,6 +36,10 @@ let Login = () => {
             currentUserId: responseBody[0]?.id,
             currentUserName: responseBody[0]?.fullname,
           });
+          localStorage.setItem("isLogin", true);
+          localStorage.setItem("userId", responseBody[0]?.id);
+          localStorage.setItem("username", responseBody[0]?.fullname);
+
           Navigate("/dashboard");
         } else {
           setLoginMessage(
@@ -68,7 +72,6 @@ let Login = () => {
     // password
     errorData.password = [];
     if (!password) {
-
       errorData.password.push("Password can't be blank");
     }
 
@@ -101,7 +104,7 @@ let Login = () => {
             <h4>Login</h4>
             <ul className="text-danger">
               {Object.keys(errors).map((control) => {
-                console.log(dirty[control]);
+                // console.log(dirty[control]);
                 if (dirty[control]) {
                   return errors[control].map((err) => {
                     return <li key={err}>{err}</li>;
@@ -126,7 +129,7 @@ let Login = () => {
                   setEmail(event.target.value);
                 }}
                 onBlur={(event) => {
-                  console.log(event.target.name);
+                  // console.log(event.target.name);
                   setDirty({ ...dirty, [event.target.name]: true });
                   validate();
                 }}

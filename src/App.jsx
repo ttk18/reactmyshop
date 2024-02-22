@@ -8,10 +8,11 @@ import NavBar from "./NavBar";
 import { UserContext } from "./UserContext";
 const App = () => {
   let [user, setUser] = useState({
-    isLoginIn: false,
-    currentUserId: null,
-    currentUserName: null,
+    isLoginIn: localStorage?.getItem("isLogin"),
+    currentUserId: localStorage?.getItem("userId"),
+    currentUserName: localStorage?.getItem("username"),
   });
+ 
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <BrowserRouter>

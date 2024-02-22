@@ -12,6 +12,9 @@ let NavBar = () => {
       currentUserId: null,
       currentUserName: null,
     });
+    localStorage.removeItem("isLogin", null);
+    localStorage.removeItem("userId", null);
+    localStorage.removeItem("username", null);
     _navigate("/");
   };
   return (

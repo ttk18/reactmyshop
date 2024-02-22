@@ -133,6 +133,9 @@ let Register = () => {
           currentUserId: responseBody[0]?.id,
           currentUserName: responseBody[0]?.fullname,
         });
+        localStorage.setItem("isLogin", true);
+        localStorage.setItem("userId", responseBody[0]?.id);
+        localStorage.setItem("username", responseBody[0]?.fullname);
         setTimeout(() => {
           Navigate("/dashboard");
         }, 3000);
