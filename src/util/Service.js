@@ -8,10 +8,7 @@ export const OrdersService = {
 };
 export const ProductService = {
   getProuctByProductId: (products, productId) => {
-    
-    return products.find((prod) => {
-        return prod.id === productId
-    } );
+    return products.find((prod) => prod.id == productId);
   },
   fetchProduct: () => {
     return fetch("http://localhost:5000/products", { method: "GET" });

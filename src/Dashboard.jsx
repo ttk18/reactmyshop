@@ -13,41 +13,44 @@ let Dashboard = () => {
   };
   let [orders, setOrders] = useState([]);
   let _userContent = useContext(UserContext);
-  let loadDataFromDatabase = useCallback(
-    async () => {
-      let response_order = await fetch(
-        `http://localhost:5000/orders?userId=${_userContent.user.currentUserId}`,
-        { method: "GET" }
-      );
-      if (response_order.ok) {
-        let response_orderBody = await response_order.json();
+  let loadDataFromDatabase = useCallback(async () => {
+    let response_order = await fetch(
+      `http://localhost:5000/orders?userId=${_userContent.user.currentUserId}`,
+      { method: "GET" }
+    );
+    if (response_order.ok) {
+      let response_orderBody = await response_order.json();
 
-        let response_product = await ProductService.fetchProduct();
+      let response_product = await ProductService.fetchProduct();
 
-        if (response_product.ok) {
-          let response_productBody = await response_product.json();
-          response_orderBody.forEach((order) => {
-            order.product = ProductService.getProuctByProductId(
-              response_productBody,
-              order.productId
-            );
-          });
-          setOrders(response_orderBody);
-        }
+      if (response_product.ok) {
+        let response_productBody = await response_product.json();
+        response_orderBody.forEach((order) => {
+          order.product = ProductService.getProuctByProductId(
+            response_productBody,
+            order.productId
+          );
+        });
+        setOrders(response_orderBody);
       }
-    }, [_userContent.user.currentUserId]
-  );
+    }
+  }, [_userContent.user.currentUserId]);
   useEffect(() => {
     loadDataFromDatabase();
   }, [_userContent.user.currentUserId, loadDataFromDatabase]);
-
+  let onBuyNowClick = () => {
+    return 123
+  }
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-12 py-3" style={header}>
           <h4>
-            <i className="fa fa-dashboard"></i> Dashboard {" "}
-            <button className="btn btn-sm btn-info" onClick={loadDataFromDatabase}>
+            <i className="fa fa-dashboard"></i> Dashboard{" "}
+            <button
+              className="btn btn-sm btn-info"
+              onClick={loadDataFromDatabase}
+            >
               <i className="fa fa-refresh"></i> Refresh
             </button>
           </h4>
@@ -66,10 +69,11 @@ let Dashboard = () => {
               ) : (
                 ""
               )}
-              {OrdersService.getPreviousOrders(orders).map((order) => {
+              {OrdersService.getPreviousOrders(orders).map((order, index) => {
                 return (
                   <Order
                     key={order.id}
+                    onBuyNowClick={onBuyNowClick}
                     productId={order.productId}
                     orderId={order.id}
                     userId={order.userId}
