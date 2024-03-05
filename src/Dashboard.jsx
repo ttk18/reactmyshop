@@ -15,7 +15,7 @@ let Dashboard = () => {
   let _userContent = useContext(UserContext);
   let loadDataFromDatabase = useCallback(async () => {
     let response_order = await fetch(
-      `http://localhost:5000/orders?userId=${_userContent.user.currentUserId}`,
+      `http://localhost:5005/orders?userId=${_userContent.user.currentUserId}`,
       { method: "GET" }
     );
     if (response_order.ok) {
@@ -52,7 +52,7 @@ let Dashboard = () => {
           isPaymentCompleted: true,
         };
         let orderResponse = await fetch(
-          `http://localhost:5000/orders/${orderId}`,
+          `http://localhost:5005/orders/${orderId}`,
           {
             method: "PUT",
             body: JSON.stringify(updateOrder),
@@ -72,7 +72,7 @@ let Dashboard = () => {
   let onDeleteClick = useCallback(
     async (orderId) => {
       let resposeDeleteOrder = await fetch(
-        `http://localhost:5000/orders/${orderId}`,
+        `http://localhost:5005/orders/${orderId}`,
         { method: "DELETE" }
       );
       if (resposeDeleteOrder.ok) {

@@ -1,13 +1,19 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { BrandsService, CategoriesService } from "./util/Service";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  BrandsService,
+  CategoriesService,
+  ProductService,
+} from "./util/Service";
 import { UserContext } from "./UserContext";
+import Product from "./Product";
 
 let Store = () => {
   let userContext = useContext(UserContext);
   let [brands, setBrands] = useState([]);
   let [categories, setCategories] = useState([]);
+  let [products, setProducts] = useState([]);
   useEffect(() => {
-    (async() => {
+    (async () => {
       let brandsResponse = await BrandsService.fetchBrands();
       let brandsReponseBody = await brandsResponse.json();
       brandsReponseBody.forEach((brand) => {
@@ -21,14 +27,33 @@ let Store = () => {
         category.isChecked = true;
       });
       setCategories(categoriesResponseBody);
+
+      // get product from db
+      let productsReponse = await ProductService.fetchProduct();
+      let productsReponseBody = await productsReponse.json();
+      if (productsReponseBody.ok) {
+        productsReponseBody.forEach((prod) => {
+          prod.brand = BrandsService.getBrandsByBrandId(
+            brandsReponseBody,
+            prod.brandId
+          );
+          prod.category = CategoriesService.getCategoriesByBrandId(
+            categoriesResponseBody,
+            prod.categoryId
+          );
+          prod.isOrdered = false;
+        });
+        console.log(productsReponseBody)
+        setProducts(productsReponseBody);
+        document.title = "Store - eCommerce";
+      }
     })();
   }, []);
   let updateBrandIsCheck = (id) => {
-
     let brandData = brands.map((brand) => {
-        if (brand.id === id) {
-          brand.isChecked = !brand.isChecked;
-        }
+      if (brand.id === id) {
+        brand.isChecked = !brand.isChecked;
+      }
       return brand;
     });
     setBrands(brandData);
@@ -102,6 +127,13 @@ let Store = () => {
                 );
               })}
             </ul>
+          </div>
+        </div>
+        <div className="col-lg-9 py-2">
+          <div className="row">
+            {products.map((prod) => {
+              return <Product key={prod.id} product={prod} />;
+            })}
           </div>
         </div>
       </div>

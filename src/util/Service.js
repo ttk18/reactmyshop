@@ -8,21 +8,27 @@ export const OrdersService = {
 };
 export const ProductService = {
   getProuctByProductId: (products, productId) => {
-    return products.find((prod) => prod.id === productId);
+    return products.find((prod) => prod.id === productId.toString());
   },
   fetchProduct: () => {
-    return fetch("http://localhost:5000/products", { method: "GET" });
+    return fetch("http://localhost:5005/products", { method: "GET" });
   },
 };
 
 export const BrandsService = {
   fetchBrands: () => {
-    return fetch("http://localhost:5000/brands", {method: "GET"}); 
+    return fetch("http://localhost:5005/brands", {method: "GET"}); 
+  },
+  getBrandsByBrandId: (brands, brandId) => {
+    return brands.find((brand) => brand.id === brandId)
   }
 }
 
 export const CategoriesService = {
   fetchCategories: () => {
-    return fetch("http://localhost:5000/categories", {method: "GET"}); 
+    return fetch("http://localhost:5005/categories", {method: "GET"}); 
+  },
+  getCategoriesByBrandId: (categories, categoryId) => {
+    return categories.find((cate) => cate.id === categoryId)
   }
 }

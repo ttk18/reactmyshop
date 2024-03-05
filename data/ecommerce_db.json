@@ -165,11 +165,11 @@
       "id": "1"
     },
     {
-      "orderId": 2,
+      "orderId": "2",
       "userId": 1,
       "productId": 3,
       "quantity": 12,
-      "isPaymentCompleted": false,
+      "isPaymentCompleted": true,
       "id": "2"
     },
     {
