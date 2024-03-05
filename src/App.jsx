@@ -5,6 +5,7 @@ import Register from "./Register";
 import NoMatchPage from "./NoMatchPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./NavBar";
+import Store from "./Store";
 import { UserContext } from "./UserContext";
 const App = () => {
   let [user, setUser] = useState({
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/store" element={<Store />} />
           <Route path="*" element={<NoMatchPage />} />
         </Routes>
       </BrowserRouter>

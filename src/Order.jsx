@@ -12,7 +12,7 @@ const Order = (props) => {
               <button
                 className="btn btn-sm btn-info mr-2"
                 onClick={() => {
-                  props.onBuyNowClick(
+                  return props.onBuyNowClick(
                     props.orderId,
                     props.userId,
                     props.productId,
@@ -22,7 +22,12 @@ const Order = (props) => {
               >
                 <i className="fa fa-truck"></i> Buy Now
               </button>
-              <button className="btn btn-sm btn-danger mr-2">
+              <button
+                className="btn btn-sm btn-danger mr-2"
+                onClick={() => {
+                  props.onDeleteClick(props.orderId);
+                }}
+              >
                 <i className="fa fa-frash-o"></i> Delete
               </button>
             </div>

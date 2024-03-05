@@ -38,9 +38,52 @@ let Dashboard = () => {
   useEffect(() => {
     loadDataFromDatabase();
   }, [_userContent.user.currentUserId, loadDataFromDatabase]);
-  let onBuyNowClick = () => {
-    return 123
-  }
+
+  let [showOrderDeleteAlert, setShowOrderDeleteAlert] = useState(false);
+  let [showOrderPlaceAlert, setShowOrderPlaceAlert] = useState(false);
+  let onBuyNowClick = useCallback(
+    async (orderId, userId, productId, quantity) => {
+      if (window.confirm("Doyou want to purchasing this product?")) {
+        let updateOrder = {
+          orderId: orderId,
+          userId: userId,
+          productId: productId,
+          quantity: quantity,
+          isPaymentCompleted: true,
+        };
+        let orderResponse = await fetch(
+          `http://localhost:5000/orders/${orderId}`,
+          {
+            method: "PUT",
+            body: JSON.stringify(updateOrder),
+            headers: { "Content-type": "application/json" },
+          }
+        );
+        if (orderResponse.ok) {
+          let orderBody = await orderResponse.json();
+          loadDataFromDatabase();
+          setShowOrderPlaceAlert(true);
+        }
+      }
+    },
+    [loadDataFromDatabase]
+  );
+
+  let onDeleteClick = useCallback(
+    async (orderId) => {
+      let resposeDeleteOrder = await fetch(
+        `http://localhost:5000/orders/${orderId}`,
+        { method: "DELETE" }
+      );
+      if (resposeDeleteOrder.ok) {
+        let responseDeleteOrderBody = await resposeDeleteOrder.json();
+        loadDataFromDatabase();
+        setShowOrderDeleteAlert(true);
+      }
+    },
+    [loadDataFromDatabase]
+  );
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -73,7 +116,6 @@ let Dashboard = () => {
                 return (
                   <Order
                     key={order.id}
-                    onBuyNowClick={onBuyNowClick}
                     productId={order.productId}
                     orderId={order.id}
                     userId={order.userId}
@@ -92,6 +134,42 @@ let Dashboard = () => {
                   {OrdersService.getCart(orders).length}
                 </span>
               </h4>
+
+              {showOrderPlaceAlert ? (
+                <div className="col-12">
+                  <div
+                    className="alert alert-success alert-dismissible fade show mt-1"
+                    role="alert"
+                  >
+                    Your orders has been placed
+                    <button
+                      className="btn-close"
+                      type="button"
+                      data-bs-dismiss="alert"
+                    ></button>
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+
+              {showOrderDeleteAlert ? (
+                <div className="col-12">
+                  <div
+                    className="alert alert-danger alert-dismissible fade show mt-1"
+                    role="alert"
+                  >
+                    Your item has been removed from the cart
+                    <button
+                      className="btn-close"
+                      type="button"
+                      data-bs-dismiss="alert"
+                    ></button>
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
               {OrdersService.getCart(orders).length === 0 ? (
                 <div className="text-danger">No orders</div>
               ) : (
@@ -108,6 +186,8 @@ let Dashboard = () => {
                     quantity={order.quantity}
                     productName={order.product.productName}
                     price={order.product.price}
+                    onBuyNowClick={onBuyNowClick}
+                    onDeleteClick={onDeleteClick}
                   />
                 );
               })}

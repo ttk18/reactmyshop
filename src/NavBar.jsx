@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 let NavBar = () => {
@@ -54,6 +54,19 @@ let NavBar = () => {
                     to="/"
                   >
                     Login
+                  </NavLink>
+                </li>
+              ) : (
+                ""
+              )}
+              {_userContent.user.isLoginIn ? (
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link text-light"
+                    aria-current="page"
+                    to="/store"
+                  >
+                    <i className="fa fa-shopping-bag"></i> Store
                   </NavLink>
                 </li>
               ) : (
